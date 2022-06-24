@@ -2,6 +2,8 @@ import sys
 from time import sleep
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -41,7 +43,7 @@ def internal_click_digit(driver,digit):
     driver.find_element(By.XPATH,number_xpaths[digit]).click()
 
 def test_multiplication():
-    chrome_driver = webdriver.Chrome()
+    chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     
     try:
         # load URL
@@ -66,7 +68,7 @@ def test_multiplication():
 
 
 def test_division():
-    chrome_driver = webdriver.Chrome()
+    chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     
     try:
         # load URL
@@ -90,7 +92,7 @@ def test_division():
         chrome_driver.close()
 
 def test_addition():
-    chrome_driver = webdriver.Chrome()
+    chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     
     try:
         # load URL
@@ -120,7 +122,7 @@ def test_addition():
         chrome_driver.close()
 
 def test_substraction():
-    chrome_driver = webdriver.Chrome()
+    chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     
     try:
         # load URL
