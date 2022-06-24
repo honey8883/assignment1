@@ -1,9 +1,10 @@
 import sys
-from time import sleep
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -63,7 +64,7 @@ def test_multiplication():
         
         # wait for the website to load
         internal_wait_for_content(chrome_driver)
-        
+        calc_input = chrome_driver.find_element(By.XPATH,input_xpath)
         calc_output = chrome_driver.find_element(By.XPATH,output_xpath)
         internal_click_digit(chrome_driver,4)
         internal_click_digit(chrome_driver,2)
@@ -72,6 +73,29 @@ def test_multiplication():
         internal_click_digit(chrome_driver,5)
         internal_click_digit(chrome_driver,2)
         internal_click_digit(chrome_driver,5)
+        assert(calc_input.text.strip() == '423 × 525')
+        assert(calc_output.text.strip() == "222075")
+    finally:
+        chrome_driver.close()
+
+def test_multiplication_keyboard():
+    chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+    try:
+        # load URL
+        chrome_driver.get('https://www.calculator.net')
+        
+        # wait for the website to load
+        internal_wait_for_content(chrome_driver)
+        calc_input = chrome_driver.find_element(By.XPATH,input_xpath)
+        calc_output = chrome_driver.find_element(By.XPATH,output_xpath)
+        
+        actions = ActionChains(chrome_driver)
+        actions.send_keys('423')
+        actions.send_keys(Keys.MULTIPLY)
+        actions.send_keys('525')
+        actions.perform()
+        assert(calc_input.text.strip() == '423 × 525')
         assert(calc_output.text.strip() == "222075")
     finally:
         chrome_driver.close()
@@ -97,6 +121,28 @@ def test_division():
         internal_click_digit(chrome_driver,2)
         internal_click_digit(chrome_driver,0)
         internal_click_digit(chrome_driver,0)
+        assert(calc_output.text.strip() == "20")
+    finally:
+        chrome_driver.close()
+
+def test_division_keyboard():
+    chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+    try:
+        # load URL
+        chrome_driver.get('https://www.calculator.net')
+        
+        # wait for the website to load
+        internal_wait_for_content(chrome_driver)
+        calc_input = chrome_driver.find_element(By.XPATH,input_xpath)
+        calc_output = chrome_driver.find_element(By.XPATH,output_xpath)
+        
+        actions = ActionChains(chrome_driver)
+        actions.send_keys('4000')
+        actions.send_keys(Keys.DIVIDE)
+        actions.send_keys('200')
+        actions.perform()
+        assert(calc_input.text.strip() == '4000 ÷ 200')
         assert(calc_output.text.strip() == "20")
     finally:
         chrome_driver.close()
@@ -130,6 +176,29 @@ def test_addition():
     finally:
         chrome_driver.close()
 
+def test_addition_keyboard():
+    chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+    try:
+        # load URL
+        chrome_driver.get('https://www.calculator.net')
+        
+        # wait for the website to load
+        internal_wait_for_content(chrome_driver)
+        calc_input = chrome_driver.find_element(By.XPATH,input_xpath)
+        calc_output = chrome_driver.find_element(By.XPATH,output_xpath)
+        
+        actions = ActionChains(chrome_driver)
+        actions.send_keys(Keys.SUBTRACT)
+        actions.send_keys('234234')
+        actions.send_keys(Keys.ADD)
+        actions.send_keys('345345')
+        actions.perform()
+        assert(calc_input.text.strip() == '-234234 + 345345')
+        assert(calc_output.text.strip() == "111111")
+    finally:
+        chrome_driver.close()
+
 def test_substraction():
     chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
     
@@ -159,6 +228,30 @@ def test_substraction():
         internal_click_digit(chrome_driver,3)
         internal_click_neg(chrome_driver)
 
+        assert(calc_output.text.strip() == "23329646")
+    finally:
+        chrome_driver.close()
+
+
+def test_substraction_keyboard():
+    chrome_driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+    try:
+        # load URL
+        chrome_driver.get('https://www.calculator.net')
+        
+        # wait for the website to load
+        internal_wait_for_content(chrome_driver)
+        calc_input = chrome_driver.find_element(By.XPATH,input_xpath)
+        calc_output = chrome_driver.find_element(By.XPATH,output_xpath)
+        
+        actions = ActionChains(chrome_driver)
+        actions.send_keys('234823')
+        actions.send_keys(Keys.SUBTRACT)
+        actions.send_keys(Keys.SUBTRACT)
+        actions.send_keys('23094823')
+        actions.perform()
+        assert(calc_input.text.strip() == '234823 − -23094823')
         assert(calc_output.text.strip() == "23329646")
     finally:
         chrome_driver.close()
